@@ -47,10 +47,10 @@ public:
     }
 
     template<typename T>
-    static value_type get_id() noexcept
+    static value_type id() noexcept
     {
         using type = detail::remove_cvref_t<T>;
-        return detail::identity<value_type, tag_type, type>::get_id();
+        return detail::identity<value_type, tag_type, type>::id();
     }
 };
 

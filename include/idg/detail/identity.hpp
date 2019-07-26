@@ -7,11 +7,11 @@
 
 namespace idg
 {
-class double_registration_error : public std::logic_error
+class registration_error : public std::logic_error
 {
 public:
     template<typename... Ts>
-    double_registration_error(std::in_place_type_t<Ts>...) noexcept
+    registration_error(std::in_place_type_t<Ts>...) noexcept
         : std::logic_error{"TODO was already registered"}
     {}
 };
@@ -32,7 +32,7 @@ private:
     {
         if (is_registered())
         {
-            throw idg::double_registration_error{std::in_place_type<Ts>...};
+            throw idg::registration_error{std::in_place_type<Ts>...};
         }
         id_ = id;
     }
@@ -42,7 +42,7 @@ private:
         return id_ != std::numeric_limits<Integral>::max();
     }
 
-    static value_type get_id() noexcept
+    static value_type id() noexcept
     {
         assert(is_registered());
         return id_;
