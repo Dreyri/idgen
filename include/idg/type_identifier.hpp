@@ -5,18 +5,14 @@
 #include <limits>
 #include <type_traits>
 
+#include "idg/detail/common.hpp"
 #include "idg/detail/identity.hpp"
 #include "idg/detail/util.hpp"
 
 namespace idg
 {
-namespace detail
-{
-struct global_tag
-{};
-} // namespace detail
-
-template<typename Integral, typename Tag = idg::detail::global_tag>
+template<typename Integral = std::size_t,
+         typename Tag      = idg::detail::global_tag>
 class type_identifier
 {
     static_assert(std::is_integral_v<Integral>,
@@ -35,7 +31,7 @@ private:
 
 public:
     template<typename T>
-    static value_type register_type() noexcept
+    static value_type register_type()
     {
         using type    = detail::remove_cvref_t<T>;
         value_type id = next_id_++;
