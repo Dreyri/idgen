@@ -19,7 +19,7 @@ public:
 namespace detail
 {
 template<typename Integral, typename Tag, typename... Ts>
-class identity
+class registration
 {
 public:
     using value_type = Integral;
@@ -50,6 +50,6 @@ private:
 };
 
 template<typename Integral, typename Tag, typename... Ts>
-Integral identity<Integral, Tag, Ts...>::id_{0};
+Integral registration<Integral, Tag, Ts...>::id_{0};
 } // namespace detail
 } // namespace idg

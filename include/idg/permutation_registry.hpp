@@ -4,25 +4,25 @@
 #include <type_traits>
 
 #include "idg/detail/common.hpp"
-#include "idg/detail/identity.hpp"
+#include "idg/detail/registration.hpp"
 #include "idg/detail/util.hpp"
 
 namespace idg
 {
 template<typename Integral = std::size_t,
          typename Tag      = idg::detail::global_tag>
-class permutation_identifier
+class permutation_registry
 {
     static_assert(std::is_integral_v<Integral>,
                   "Integral is not an integral type");
 
     template<typename T>
-    struct permutation_identifier_tag
+    struct permutation_registry_tag
     {};
 
 public:
     using value_type = Integral;
-    using tag_type   = permutation_identifier_tag<Tag>;
+    using tag_type   = permutation_registry_tag<Tag>;
 
 private:
     static std::atomic<value_type> next_id_;
@@ -32,8 +32,9 @@ public:
     static value_type register_types()
     {
         value_type id = next_id_++;
-        detail::identity<value_type, tag_type, detail::remove_cvref_t<Ts>...>::
-            assign_id(id);
+        detail::registration<value_type,
+                             tag_type,
+                             detail::remove_cvref_t<Ts>...>::assign_id(id);
         return id;
     }
 
@@ -46,16 +47,21 @@ public:
     template<typename... Ts>
     static bool is_registered() noexcept
     {
-        return detail::identity<value_type,
-                                tag_type,
-                                detail::remove_cvref_t<Ts>...>::is_registered();
+        return detail::registration<
+            value_type,
+            tag_type,
+            detail::remove_cvref_t<Ts>...>::is_registered();
     }
 
     template<typename... Ts>
     static value_type id() noexcept
     {
-        return detail::
-            identity<value_type, tag_type, detail::remove_cvref_t<Ts>...>::id();
+        return detail::registration<value_type,
+                                    tag_type,
+                                    detail::remove_cvref_t<Ts>...>::id();
     }
 };
+
+template<typename Integral, typename Tag>
+std::atomic<Integral> permutation_registry<Integral, Tag>::next_id_{0};
 } // namespace idg
