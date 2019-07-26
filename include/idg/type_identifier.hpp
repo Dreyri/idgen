@@ -6,6 +6,7 @@
 #include <type_traits>
 
 #include "idg/detail/identity.hpp"
+#include "idg/detail/util.hpp"
 
 namespace idg
 {
@@ -36,21 +37,24 @@ public:
     template<typename T>
     static value_type register_type() noexcept
     {
+        using type    = detail::remove_cvref_t<T>;
         value_type id = next_id_++;
-        detail::identity<value_type, tag_type, T>::assign_id(id);
+        detail::identity<value_type, tag_type, type>::assign_id(id);
         return id;
     }
 
     template<typename T>
     static bool is_registered() noexcept
     {
-        return detail::identity<value_type, tag_type, T>::is_registered();
+        using type = detail::remove_cvref_t<T>;
+        return detail::identity<value_type, tag_type, type>::is_registered();
     }
 
     template<typename T>
     static value_type get_id() noexcept
     {
-        return detail::identity<value_type, tag_type, T>::get_id();
+        using type = detail::remove_cvref_t<T>;
+        return detail::identity<value_type, tag_type, type>::get_id();
     }
 };
 
