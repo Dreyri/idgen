@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: idgen
+Description: Efficiently generate unique global ids for types, without RTTI
+Version: @PROJECT_VERSION@
+
+Requires:
+Cflags: -I${includedir}
+
