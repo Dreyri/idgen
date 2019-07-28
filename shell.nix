@@ -6,5 +6,5 @@ in
 gcc9Stdenv.mkDerivation {
   name = "idgen-dev";
 
-  buildInputs = [ nameof ];
+  buildInputs = [ cmake nameof catch2 ];
 }

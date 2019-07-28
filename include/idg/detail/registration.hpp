@@ -28,6 +28,7 @@ public:
 private:
     static value_type id_;
 
+public:
     static void assign_id(value_type id)
     {
         if (is_registered())
@@ -50,6 +51,7 @@ private:
 };
 
 template<typename Integral, typename Tag, typename... Ts>
-Integral registration<Integral, Tag, Ts...>::id_{0};
+Integral registration<Integral, Tag, Ts...>::id_{
+    std::numeric_limits<Integral>::max()};
 } // namespace detail
 } // namespace idg

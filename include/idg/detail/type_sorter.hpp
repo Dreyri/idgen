@@ -54,7 +54,7 @@ constexpr auto sort_array(const std::array<T, N>& arr) noexcept
 {
     auto sorted = arr;
     ::idg::detail::insertion_sort(
-        arr.begin(), arr.end(), [](const auto& lhs, const auto& rhs) {
+        sorted.begin(), sorted.end(), [](const auto& lhs, const auto& rhs) {
             return lhs.name < rhs.name;
         });
 

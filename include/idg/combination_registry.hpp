@@ -14,18 +14,18 @@ namespace idg
 {
 template<typename Integral = std::size_t,
          typename Tag      = idg::detail::global_tag>
-class combination_identifier
+class combination_registry
 {
     static_assert(std::is_integral_v<Integral>,
                   "Integral is not an integral type");
 
     template<typename T>
-    struct combination_identifier_tag
+    struct combination_registry_tag
     {};
 
 public:
     using value_type = Integral;
-    using tag_type   = combination_identifier_tag<Tag>;
+    using tag_type   = combination_registry_tag<Tag>;
 
 private:
     static std::atomic<value_type> next_id_;
@@ -57,15 +57,14 @@ public:
     template<typename... Ts>
     static bool is_registered() noexcept
     {
-        // TODO
         auto type_list = ::idg::detail::sort_types(
             boost::hana::type_c<detail::remove_cvref_t<Ts>>...);
 
         return boost::hana::unpack(type_list, [&](auto... types) {
-            detail::registration<value_type,
-                                 tag_type,
-                                 typename decltype(
-                                     types)::type...>::is_registered();
+            return detail::registration<value_type,
+                                        tag_type,
+                                        typename decltype(
+                                            types)::type...>::is_registered();
         });
     }
 
@@ -76,13 +75,14 @@ public:
             boost::hana::type_c<detail::remove_cvref_t<Ts>>...);
 
         return boost::hana::unpack(type_list, [&](auto... types) {
-            detail::registration<value_type,
-                                 tag_type,
-                                 typename decltype(types)::type...>::id();
+            return detail::registration<value_type,
+                                        tag_type,
+                                        typename decltype(
+                                            types)::type...>::id();
         });
     }
 };
 
 template<typename Integral, typename Tag>
-std::atomic<Integral> combination_identifier<Integral, Tag>::next_id_{0};
+std::atomic<Integral> combination_registry<Integral, Tag>::next_id_{0};
 } // namespace idg
