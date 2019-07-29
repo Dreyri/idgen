@@ -1,4 +1,7 @@
-{ stdenv, cmake, nameof }:
+{ stdenv, cmake, fetchurl, callPackage }:
+let
+  nameof = callPackage ./nix/nameof.nix { };
+in
 stdenv.mkDerivation rec {
   name = "idgen-${version}";
   version = "git";

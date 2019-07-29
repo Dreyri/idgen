@@ -9,4 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+  
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/Neargye/nameof";
+    description = "Nameof operator for modern C++";
+    license = licenses.mit;
+  };
 }
