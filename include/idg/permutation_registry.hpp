@@ -29,19 +29,12 @@ private:
 
 public:
     template<typename... Ts>
-    static value_type register_types()
+    static value_type register_permutation()
     {
-        value_type id = next_id_++;
-        detail::registration<value_type,
-                             tag_type,
-                             detail::remove_cvref_t<Ts>...>::assign_id(id);
-        return id;
-    }
-
-    template<typename T>
-    static value_type register_type()
-    {
-        return register_types<T>();
+        return detail::registration<
+            value_type,
+            tag_type,
+            detail::remove_cvref_t<Ts>...>::do_registration(next_id_);
     }
 
     template<typename... Ts>

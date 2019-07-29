@@ -32,26 +32,17 @@ private:
 
 public:
     template<typename... Ts>
-    static value_type register_types()
+    static value_type register_combination()
     {
         auto type_list = ::idg::detail::sort_types(
             boost::hana::type_c<detail::remove_cvref_t<Ts>>...);
-        value_type id = next_id_++;
 
-        boost::hana::unpack(type_list, [&](auto... types) {
-            detail::registration<value_type,
-                                 tag_type,
-                                 typename decltype(
-                                     types)::type...>::assign_id(id);
+        return boost::hana::unpack(type_list, [&](auto... types) {
+            return detail::registration<
+                value_type,
+                tag_type,
+                typename decltype(types)::type...>::do_registration(next_id_);
         });
-
-        return id;
-    }
-
-    template<typename T>
-    static value_type register_type()
-    {
-        return register_types<T>();
     }
 
     template<typename... Ts>

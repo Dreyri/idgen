@@ -7,10 +7,12 @@ TEST_CASE("combination")
 {
     using reg = idg::combination_registry<std::size_t, idg::detail::global_tag>;
 
-    auto id0 = reg::register_types<int, bool, char>();
-    REQUIRE_THROWS(reg::register_types<char, int, bool>());
+    auto id0 = reg::register_combination<int, bool, char>();
+    auto id1 = reg::register_combination<char, int, bool>();
+    REQUIRE(id0 == id1);
+
     REQUIRE(reg::id<int, bool, char>() == 0);
     REQUIRE(reg::is_registered<bool, int, char>());
-    
-    REQUIRE(reg::register_types<int, bool>() == 1);
+
+    REQUIRE(reg::register_combination<int, bool>() == 1);
 }

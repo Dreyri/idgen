@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <cassert>
 #include <limits>
 #include <stdexcept>
@@ -7,15 +8,6 @@
 
 namespace idg
 {
-class registration_error : public std::logic_error
-{
-public:
-    template<typename... Ts>
-    registration_error(std::in_place_type_t<Ts>...) noexcept
-        : std::logic_error{"TODO was already registered"}
-    {}
-};
-
 namespace detail
 {
 template<typename Integral, typename Tag, typename... Ts>
@@ -29,13 +21,15 @@ private:
     static value_type id_;
 
 public:
-    static void assign_id(value_type id)
+    static value_type do_registration(std::atomic<value_type>& counter)
     {
         if (is_registered())
         {
-            throw idg::registration_error{std::in_place_type<Ts>...};
+            return id_;
         }
-        id_ = id;
+
+        id_ = counter++;
+        return id_;
     }
 
     static bool is_registered() noexcept

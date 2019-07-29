@@ -33,10 +33,9 @@ public:
     template<typename T>
     static value_type register_type()
     {
-        using type    = detail::remove_cvref_t<T>;
-        value_type id = next_id_++;
-        detail::registration<value_type, tag_type, type>::assign_id(id);
-        return id;
+        using type = detail::remove_cvref_t<T>;
+        return detail::registration<value_type, tag_type, type>::
+            do_registration(next_id_);
     }
 
     template<typename T>
