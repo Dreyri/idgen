@@ -1,5 +1,7 @@
 set(TESTS
+  permutation
   combination
+  type
   )
 
 find_package(Catch2 REQUIRED)
